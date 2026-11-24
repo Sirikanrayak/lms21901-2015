@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>รหัสวิชา 21901-2015 การติดตั้งระบบเครือข่ายคอมพิวเตอร์เบื้องต้น — วิทยาลัยเทคนิคนครนายก</title>
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <!-- Google Fonts: Sarabun & Prompt -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700;800&family=Sarabun:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="auth-locked">
+
+  <!-- ========================================================================
+       PRE-ENTRY AUTHENTICATION GATE (แสดงหน้า Login / สมัครสมาชิกด้วย Gmail ก่อนเข้าสู่หน้าแรก)
+       ======================================================================== -->
+  <div class="auth-gate-overlay" id="authGateOverlay">
+    <div class="auth-container">
+      <!-- Left Brand & Course Identity Panel -->
+      <div class="auth-brand-panel">
+        <div>
+          <div class="auth-logo-wrap">
+            <img src="assets/logo.png" alt="โลโก้ วิทยาลัยเทคนิคนครนายก" class="auth-logo-img" />
+            <div class="auth-college-title">
+              <h2>วิทยาลัยเทคนิคนครนายก</h2>
+              <p>NAKHON NAYOK TECHNICAL COLLEGE</p>
+              <p>แผนกวิชาเทคโนโลยีสารสนเทศ (อาชีวศึกษา)</p>
+            </div>
+          </div>
+
+          <div class="auth-course-hero">
+            <span class="auth-course-badge">หลักสูตรประกาศนียบัตรวิชาชีพ พุทธศักราช 2567</span>
+            <h1>รหัสวิชา 21901-2015<br>การติดตั้งระบบเครือข่ายคอมพิวเตอร์เบื้องต้น</h1>
+            <div class="en-title">Basic Computer Network Installation (ท-ป-น 1-3-2 | 2 หน่วยกิต)</div>
+
+            <ul class="auth-meta-list">
+              <li>⚡ <strong>เวลาเรียน:</strong> ทฤษฎี 1 ชม./สัปดาห์ | ปฏิบัติ 3 ชม./สัปดาห์ (รวม 72 ชม. / 18 สัปดาห์)</li>
+              <li>🎖️ <strong>อ้างอิงมาตรฐานคุณวุฒิวิชาชีพ (TPQI):</strong> รหัส 40103.01, 40103.02, 40108.01, 40108.02 (อาชีพช่างสนับสนุนด้านเทคนิค ระดับ 3)</li>
+              <li>📚 <strong>สื่อครบวงจร:</strong> ใบความรู้ 1-15 | ใบกิจกรรม 1-15 | ใบงาน 1-15 | ใบมอบหมายงาน 1-15 | แบบทดสอบก่อน-หลังเรียน 8 หน่วย | แบบทดสอบวัดผลสัมฤทธิ์ 80 ข้อ</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="auth-teacher-box">
+          <div>พัฒนาและจัดการเรียนรู้โดย</div>
+          <strong>นางสาวศิริกัลยา คำนนท์</strong>
+          <div>ตำแหน่ง ครูชำนาญการพิเศษ — แผนกวิชาเทคโนโลยีสารสนเทศ</div>
+          <div>วิทยาลัยเทคนิคนครนายก สำนักงานคณะกรรมการการอาชีวศึกษา กระทรวงศึกษาธิการ</div>
+        </div>
+      </div>
+
+      <!-- Right Login & Gmail Registration Form Panel -->
+      <div class="auth-form-panel">
+        <div class="auth-gate-header">
+          <h3>🔐 เข้าสู่ระบบ / สมัครสมาชิกด้วย Gmail</h3>
+          <p>กรุณาเลือกประเภทผู้ใช้งานและยืนยันตัวตนด้วยบัญชี <strong>@gmail.com</strong> เพื่อเข้าสู่หน้าแรกของระบบ</p>
+        </div>
+
+        <!-- เลือกประเภทผู้ใช้งาน: ผู้เรียน (Student) หรือ ครูผู้สอน (Teacher) -->
+        <div class="role-selector">
+          <button type="button" class="role-btn active" data-role="student" onclick="AuthSystem.setRole('student')">
+            🎓 ผู้เรียน (Student)
+          </button>
+          <button type="button" class="role-btn" data-role="teacher" onclick="AuthSystem.setRole('teacher')">
+            👩‍🏫 ครูผู้สอน (Teacher)
+          </button>
+        </div>
+
+        <!-- แท็บสลับ เข้าสู่ระบบ / สมัครสมาชิกด้วย Gmail -->
+        <div class="auth-tabs">
+          <button type="button" class="auth-tab-btn active" data-tab="login" onclick="AuthSystem.switchTab('login')">
+            แท็บที่ 1 — เข้าสู่ระบบ (Login)
+          </button>
+          <button type="button" class="auth-tab-btn" data-tab="register" onclick="AuthSystem.switchTab('register')">
+            แท็บที่ 2 — สมัครสมาชิกด้วย Gmail
+          </button>
+        </div>
+
+        <!-- กล่องแจ้งเตือนสถานะ / รหัส OTP -->
+        <div id="authAlertBox" class="auth-alert"></div>
+
+        <!-- แท็บที่ 1: เข้าสู่ระบบ (Login) -->
+        <div id="authLoginPane">
+          <form onsubmit="AuthSystem.handleLoginSubmit(event)">
+            <div class="auth-form-group">
+              <label for="loginEmail">อีเมลบัญชี Gmail (@gmail.com)</label>
+              <input type="email" id="loginEmail" class="auth-input" placeholder="เช่น thanakorn.it67@gmail.com หรือ sirikanya.k@gmail.com" required />
+            </div>
+
+            <div class="auth-form-group">
+              <label for="loginPassword">รหัสผ่าน (Password)</label>
+              <div class="input-with-action">
+                <input type="password" id="loginPassword" class="auth-input" placeholder="กรอกรหัสผ่านของคุณ" required />
+                <button type="button" class="pw-toggle-btn" onclick="AuthSystem.togglePasswordVisibility('loginPassword', this)">แสดงรหัส</button>
+              </div>
+            </div>
+
+            <button type="submit" class="auth-submit-btn">
+              🚀 เข้าสู่ระบบด้วยบัญชี Gmail
+            </button>
+          </form>
+
+          <div class="auth-divider"><span>หรือเชื่อมต่อบัญชี Google</span></div>
+
+          <button type="button" class="oauth-google-btn" onclick="AuthSystem.openGoogleOAuthModal()">
+            <svg width="20" height="20" viewBox="0 0 48 48">
+              <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+              <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+              <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+              <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+            </svg>
+            ดำเนินการต่อด้วยบัญชี Gmail / Google (OAuth)
+          </button>
+
+          <!-- ปุ่มบัญชีสาธิตเข้าสู่หน้าแรกในคลิกเดียว -->
+          <div class="demo-accounts-box">
+            <div class="demo-accounts-title">⚡ คลิกปุ่มบัญชีสาธิตเพื่อเข้าสู่หน้าแรกได้ในคลิกเดียว</div>
+            <div class="demo-btns-grid">
+              <button type="button" class="demo-login-btn teacher-demo" onclick="AuthSystem.demoLogin('teacher')">
+                <span>👩‍🏫 ครูศิริกัลยา (ครูผู้สอน)</span>
+                <small style="font-weight:500;opacity:0.85;">sirikanya.k@gmail.com</small>
+              </button>
+              <button type="button" class="demo-login-btn student-demo" onclick="AuthSystem.demoLogin('student')">
+                <span>🎓 นายธนากร (ผู้เรียน)</span>
+                <small style="font-weight:500;opacity:0.85;">thanakorn.it67@gmail.com</small>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- แท็บที่ 2: สมัครสมาชิกด้วย Gmail -->
+        <div id="authRegisterPane" style="display:none;">
+          <form onsubmit="AuthSystem.handleRegisterSubmit(event)">
+            <div class="auth-form-group">
+              <label for="regEmail">อีเมลบัญชี Gmail (@gmail.com เท่านั้น)</label>
+              <div class="input-with-action">
+                <input type="email" id="regEmail" class="auth-input" placeholder="เช่น student.ntc@gmail.com" required />
+                <button type="button" class="otp-btn" onclick="AuthSystem.requestGmailOtp()">
+                  รับรหัสยืนยัน Gmail (OTP 6 หลัก)
+                </button>
+              </div>
+            </div>
+
+            <div class="auth-form-group">
+              <label for="regOtp">รหัสยืนยัน Gmail (OTP 6 หลัก)</label>
+              <input type="text" id="regOtp" class="auth-input" maxlength="6" placeholder="กดปุ่มรับรหัส OTP ด้านบน (หรือกรอกเลข 6 หลัก)" required />
+            </div>
+
+            <div class="auth-form-group">
+              <label for="regFullName">ชื่อ – นามสกุล</label>
+              <input type="text" id="regFullName" class="auth-input" placeholder="เช่น นายธนากร นครนายก หรือ นางสาวศิริกัลยา คำนนท์" required />
+            </div>
+
+            <!-- ฟิลด์สำหรับผู้เรียน (Student) -->
+            <div id="regStudentFields">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;">
+                <div class="auth-form-group">
+                  <label for="regStudentId">รหัสนักศึกษา</label>
+                  <input type="text" id="regStudentId" class="auth-input" placeholder="เช่น 6721901005" />
+                </div>
+                <div class="auth-form-group">
+                  <label for="regStudentGroup">กลุ่มเรียน / ชั้นปี</label>
+                  <input type="text" id="regStudentGroup" class="auth-input" placeholder="เช่น ปวช.1/1 เทคโนโลยีสารสนเทศ" value="ปวช.1/1 เทคโนโลยีสารสนเทศ" />
+                </div>
+              </div>
+            </div>
+
+            <!-- ฟิลด์สำหรับครูผู้สอน (Teacher) -->
+            <div id="regTeacherFields" style="display:none;">
+              <div class="auth-form-group">
+                <label for="regTeacherCode">รหัสยืนยันครูผู้สอน (กรอกรหัส <span style="color:var(--primary);">31901-2007</span>)</label>
+                <input type="text" id="regTeacherCode" class="auth-input" placeholder="กรอกรหัสยืนยันครูผู้สอน 31901-2007" value="31901-2007" />
+              </div>
+            </div>
+
+            <div class="auth-form-group">
+              <label for="regPassword">ตั้งรหัสผ่าน (อย่างน้อย 6 ตัวอักษร)</label>
+              <div class="input-with-action">
+                <input type="password" id="regPassword" class="auth-input" placeholder="ตั้งรหัสผ่านสำหรับเข้าใช้งาน" required />
+                <button type="button" class="pw-toggle-btn" onclick="AuthSystem.togglePasswordVisibility('regPassword', this)">แสดงรหัส</button>
+              </div>
+            </div>
+
+            <button type="submit" class="auth-submit-btn">
+              ✅ ยืนยันการสมัครสมาชิกด้วย Gmail และเข้าสู่หน้าแรก
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       GOOGLE OAUTH ACCOUNT PICKER MODAL (จำลองการเลือกบัญชี Gmail OAuth)
+       ======================================================================== -->
+  <div class="modal-backdrop" id="googleOAuthModal">
+    <div class="oauth-modal-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);">
+        <div style="display:flex;align-items:center;gap:0.6rem;">
+          <img src="assets/logo.png" alt="Logo" style="width:36px;height:36px;border-radius:50%;" />
+          <div>
+            <h4 style="font-size:1rem;font-weight:800;">เลือกบัญชี Gmail (Google OAuth)</h4>
+            <p style="font-size:0.78rem;color:var(--text-muted);">เพื่อดำเนินการต่อยัง LMS วิชา 21901-2015</p>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline btn-sm" onclick="AuthSystem.closeGoogleOAuthModal()">✕</button>
+      </div>
+
+      <div class="oauth-account-item" onclick="AuthSystem.selectOAuthAccount(0)">
+        <div class="user-avatar-badge" style="width:38px;height:38px;font-size:0.95rem;">ศ</div>
+        <div>
+          <div style="font-weight:800;font-size:0.9rem;">นางสาวศิริกัลยา คำนนท์ (ครูผู้สอน)</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);">sirikanya.k@gmail.com • ครูชำนาญการพิเศษ</div>
+        </div>
+      </div>
+
+      <div class="oauth-account-item" onclick="AuthSystem.selectOAuthAccount(1)">
+        <div class="user-avatar-badge" style="width:38px;height:38px;font-size:0.95rem;background:var(--accent);">ธ</div>
+        <div>
+          <div style="font-weight:800;font-size:0.9rem;">นายธนากร นครนายก (ผู้เรียน)</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);">thanakorn.it67@gmail.com • รหัส 6721901001</div>
+        </div>
+      </div>
+
+      <div class="oauth-account-item" onclick="AuthSystem.selectOAuthAccount(2)">
+        <div class="user-avatar-badge" style="width:38px;height:38px;font-size:0.95rem;background:var(--success);">พ</div>
+        <div>
+          <div style="font-weight:800;font-size:0.9rem;">นางสาวพิมพ์ชนก รักเรียน (ผู้เรียน)</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);">pimchanok.it67@gmail.com • รหัส 6721901002</div>
+        </div>
+      </div>
+
+      <div style="margin-top:0.85rem;padding-top:0.85rem;border-top:1px solid var(--border);">
+        <div style="font-size:0.8rem;font-weight:700;margin-bottom:0.4rem;">หรือระบุบัญชี @gmail.com อื่นของคุณ:</div>
+        <div style="display:grid;gap:0.45rem;">
+          <input type="text" id="customOAuthName" class="auth-input" placeholder="ชื่อ-นามสกุล (เช่น นายสมชาย ใจดี)" style="padding:0.45rem 0.7rem;font-size:0.85rem;" />
+          <div style="display:flex;gap:0.4rem;">
+            <input type="email" id="customOAuthEmail" class="auth-input" placeholder="yourname@gmail.com" style="padding:0.45rem 0.7rem;font-size:0.85rem;" />
+            <button type="button" class="btn btn-primary btn-sm" onclick="AuthSystem.submitCustomOAuthGmail()">เข้าใช้งาน</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MAIN APPLICATION SHELL (แสดงหลังผ่านการ Login / สมัครสมาชิกด้วย Gmail สำเร็จ)
+       ======================================================================== -->
+  <div class="app-shell">
+    <!-- Left Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <div class="sidebar-brand">
+        <img src="assets/logo.png" alt="โลโก้ วิทยาลัยเทคนิคนครนายก" class="sidebar-logo" />
+        <div class="sidebar-brand-text">
+          <h2>วิทยาลัยเทคนิคนครนายก</h2>
+          <p>แผนกวิชาเทคโนโลยีสารสนเทศ</p>
+        </div>
+      </div>
+
+      <div class="sidebar-course-box">
+        <span class="code-pill">รหัสวิชา 21901-2015 (ท-ป-น 1-3-2)</span>
+        <div style="font-weight:700;color:#ffffff;line-height:1.3;">การติดตั้งระบบเครือข่ายคอมพิวเตอร์เบื้องต้น</div>
+        <div style="color:#fde68a;font-size:0.76rem;margin-top:0.2rem;">โดย ครูศิริกัลยา คำนนท์ (ครูชำนาญการพิเศษ)</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">ข้อมูลหลักสูตรรายวิชา</div>
+        <button class="nav-item-btn active" data-view="dashboard" onclick="LMSApp.navigate('dashboard')">
+          <span class="nav-item-left">🏠 หน้าแรก (Dashboard)</span>
+        </button>
+        <button class="nav-item-btn" data-view="curriculum" onclick="LMSApp.navigate('curriculum')">
+          <span class="nav-item-left">📊 ตารางวิเคราะห์ & 18 สัปดาห์</span>
+          <span class="nav-badge">8 หน่วย</span>
+        </button>
+
+        <div class="nav-section-label">เอกสารการเรียนรู้ (1–15)</div>
+        <button class="nav-item-btn" data-view="knowledge" onclick="LMSApp.navigate('knowledge')">
+          <span class="nav-item-left">📖 ใบความรู้ ที่ 1–15</span>
+          <span class="nav-badge" id="badgeKnowledge">0/15</span>
+        </button>
+        <button class="nav-item-btn" data-view="activity" onclick="LMSApp.navigate('activity')">
+          <span class="nav-item-left">🧩 ใบกิจกรรม ที่ 1–15</span>
+          <span class="nav-badge" id="badgeActivity">0/15</span>
+        </button>
+        <button class="nav-item-btn" data-view="jobsheet" onclick="LMSApp.navigate('jobsheet')">
+          <span class="nav-item-left">🛠️ ใบงาน ที่ 1–15</span>
+          <span class="nav-badge" id="badgeJobSheet">0/15</span>
+        </button>
+        <button class="nav-item-btn" data-view="assignment" onclick="LMSApp.navigate('assignment')">
+          <span class="nav-item-left">📋 ใบมอบหมายงาน ที่ 1–15</span>
+          <span class="nav-badge" id="badgeAssignment">0/15</span>
+        </button>
+
+        <div class="nav-section-label">ฝึกทักษะจำลองเชิงโต้ตอบ</div>
+        <button class="nav-item-btn" data-view="simulators" onclick="LMSApp.navigate('simulators')">
+          <span class="nav-item-left">⚡ ห้องแล็บจำลอง (Virtual Lab)</span>
+          <span class="nav-badge">4 Labs</span>
+        </button>
+
+        <div class="nav-section-label">ระบบวัดและประเมินผล</div>
+        <button class="nav-item-btn" data-view="pretest" onclick="LMSApp.navigate('pretest')">
+          <span class="nav-item-left">📝 แบบทดสอบก่อนเรียน (1–8)</span>
+          <span class="nav-badge" id="badgePretest">0/8</span>
+        </button>
+        <button class="nav-item-btn" data-view="posttest" onclick="LMSApp.navigate('posttest')">
+          <span class="nav-item-left">🎯 แบบทดสอบหลังเรียน (1–8)</span>
+          <span class="nav-badge" id="badgePosttest">0/8</span>
+        </button>
+        <button class="nav-item-btn" data-view="final80" onclick="LMSApp.navigate('final80')">
+          <span class="nav-item-left">🏆 แบบทดสอบวัดผลสัมฤทธิ์</span>
+          <span class="nav-badge" id="badgeFinal80">80 ข้อ</span>
+        </button>
+
+        <div class="nav-section-label">ระบบครูผู้สอน & รายงานผล</div>
+        <button class="nav-item-btn" data-view="teacher" onclick="LMSApp.navigate('teacher')">
+          <span class="nav-item-left">👩‍🏫 รายงานผล & ระบบครูผู้สอน</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div>หลักสูตร ปวช. พุทธศักราช 2567</div>
+        <div>มาตรฐานคุณวุฒิวิชาชีพ TPQI ระดับ 3</div>
+        <div>© วิทยาลัยเทคนิคนครนายก สอศ.</div>
+      </div>
+    </aside>
+
+    <!-- Main Content Column -->
+    <div class="app-main">
+      <!-- Top Welcome Banner & Logout Bar -->
+      <header class="welcome-banner">
+        <div class="welcome-user-info">
+          <div class="user-avatar-badge" id="bannerUserAvatar">ศ</div>
+          <div class="welcome-text-block">
+            <h4>
+              <span>ยินดีต้อนรับ, <strong id="bannerUserName">นางสาวศิริกัลยา คำนนท์</strong></span>
+              <span class="role-status-pill teacher" id="bannerUserRole">👩‍🏫 สถานะ: ครูผู้สอน (Teacher)</span>
+            </h4>
+            <div class="welcome-meta-pills">
+              <span>📧 อีเมล: <strong id="bannerUserEmail">sirikanya.k@gmail.com</strong></span>
+              <span>•</span>
+              <span id="bannerUserId">รหัสประจำตัว: T-21901-2015</span>
+              <span>•</span>
+              <span id="bannerUserGroup">ครูชำนาญการพิเศษ (แผนกวิชาเทคโนโลยีสารสนเทศ)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="welcome-actions">
+          <button type="button" class="btn btn-outline btn-sm" onclick="LMSApp.navigate('teacher')">
+            📊 ดูสรุปคะแนนทั้งหมด
+          </button>
+          <button type="button" class="btn-logout" onclick="AuthSystem.logout()">
+            🚪 ออกจากระบบ (Logout)
+          </button>
+        </div>
+      </header>
+
+      <!-- Dynamic Content Container -->
+      <main class="content-wrapper" id="mainViewContainer"></main>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data-curriculum.js"></script>
+  <script src="js/data-sheets.js"></script>
+  <script src="js/data-tests.js"></script>
+  <script src="js/simulators.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
